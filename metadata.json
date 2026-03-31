@@ -1,0 +1,5 @@
+{
+  "name": "Reddit-Style Article Platform",
+  "description": "A full-stack, SEO-friendly article platform with Firebase Auth, JSON file storage, and an automated sitemap.",
+  "requestFramePermissions": []
+}
