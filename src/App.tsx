@@ -70,8 +70,6 @@ export default function App() {
                 <span className="font-bold text-gray-900">reddit-articles</span>
               </div>
               <div className="flex items-center gap-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                <a href="/sitemap.xml" target="_blank" className="hover:text-orange-600 transition-colors">Sitemap</a>
-                <Link to="/admin" className="hover:text-orange-600 transition-colors">Admin</Link>
                 <span>© 2026 Reddit Articles</span>
               </div>
             </div>

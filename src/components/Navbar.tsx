@@ -63,9 +63,6 @@ export default function Navbar({ user }: { user: any }) {
                   <User size={20} />
                   <span className="hidden sm:inline">Profile</span>
                 </Link>
-                <Link to="/admin" className="text-gray-400 hover:text-gray-600">
-                  <ShieldCheck size={20} />
-                </Link>
                 <button 
                   onClick={handleLogout}
                   className="flex items-center gap-1 text-gray-600 hover:text-red-600 font-medium cursor-pointer"
