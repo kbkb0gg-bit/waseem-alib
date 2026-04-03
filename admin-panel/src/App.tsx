@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { ShieldCheck, Users, FileText, MessageSquare, Trash2, Search, Database, BarChart3 } from "lucide-react";
+import { ShieldCheck, Users, FileText, MessageSquare, Trash2, Search, Database, BarChart3, LogOut } from "lucide-react";
 
-export default function Admin() {
+// For Netlify deployment, you can set VITE_API_URL in Netlify environment variables
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
+export default function App() {
   const [password, setPassword] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [stats, setStats] = useState<any>(null);
@@ -17,7 +20,7 @@ export default function Admin() {
     setError("");
 
     try {
-      const response = await fetch("/api/admin/stats", {
+      const response = await fetch(`${API_BASE_URL}/api/admin/stats`, {
         headers: {
           "x-admin-password": password,
         },
@@ -31,7 +34,7 @@ export default function Admin() {
         setError("Invalid admin password.");
       }
     } catch (error) {
-      setError("Failed to connect to admin API.");
+      setError("Failed to connect to admin API. Check if your backend is running.");
     } finally {
       setLoading(false);
     }
@@ -41,7 +44,7 @@ export default function Admin() {
     if (!window.confirm(`Are you sure you want to delete this ${type.slice(0, -1)}?`)) return;
 
     try {
-      const response = await fetch(`/api/admin/${type}/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/${type}/${id}`, {
         method: "DELETE",
         headers: {
           "x-admin-password": password,
@@ -50,7 +53,7 @@ export default function Admin() {
 
       if (response.ok) {
         // Refresh stats
-        const statsResponse = await fetch("/api/admin/stats", {
+        const statsResponse = await fetch(`${API_BASE_URL}/api/admin/stats`, {
           headers: { "x-admin-password": password },
         });
         const data = await statsResponse.json();
@@ -61,9 +64,15 @@ export default function Admin() {
     }
   };
 
+  const handleLogout = () => {
+    setIsAuthorized(false);
+    setPassword("");
+    setStats(null);
+  };
+
   if (!isAuthorized) {
     return (
-      <div className="max-w-md mx-auto mt-20">
+      <div className="max-w-md mx-auto mt-20 px-4">
         <Helmet>
           <title>Admin Login - Reddit Articles</title>
         </Helmet>
@@ -107,7 +116,7 @@ export default function Admin() {
   }) : [];
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-5xl mx-auto px-4 py-10 space-y-6">
       <Helmet>
         <title>Admin Dashboard - Reddit Articles</title>
       </Helmet>
@@ -117,15 +126,24 @@ export default function Admin() {
           <ShieldCheck className="text-orange-600" size={28} />
           Admin Dashboard
         </h1>
-        <div className="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded-lg">
-          <Search size={18} className="text-gray-400" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder={`Search ${activeTab}...`}
-            className="bg-transparent outline-none text-sm w-40 sm:w-60"
-          />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded-lg">
+            <Search size={18} className="text-gray-400" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder={`Search ${activeTab}...`}
+              className="bg-transparent outline-none text-sm w-40 sm:w-60"
+            />
+          </div>
+          <button 
+            onClick={handleLogout}
+            className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+            title="Logout"
+          >
+            <LogOut size={20} />
+          </button>
         </div>
       </div>
 

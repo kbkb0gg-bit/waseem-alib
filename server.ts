@@ -31,7 +31,10 @@ const PORT = 3000;
 app.use(helmet({
   contentSecurityPolicy: false, // Disable for Vite dev
 }));
-app.use(cors());
+app.use(cors({
+  origin: true, // In production, you should specify the Netlify URL
+  credentials: true,
+}));
 app.use(express.json());
 
 const DATA_DIR = path.join(__dirname, "data");
