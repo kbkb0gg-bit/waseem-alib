@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build",
+    "build": "npm run build:user && npm run build:admin",
+    "build:user": "vite build --config vite.user.config.ts",
+    "build:admin": "vite build --config vite.admin.config.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
